@@ -1,0 +1,857 @@
+# -*- coding: utf-8 -*-
+
+"""
+Petit problème au niveau du l.count()
+les occurence ne se compte pas il faut trouver une solution.
+
+
+"""
+import random
+
+taille_bateau = 3
+
+
+def taille_grille():
+    """
+    Cette fonction demande à l'utilisateur la taille voulue pour la grille de
+    jeu où se déroulera la partie.
+    """
+
+    reponse_ok = False
+    while not reponse_ok:
+        taille = input(" La taille du plateau de jeu sera de '5x5', '6x6',\
+'7x7','8x8' ou '9x9' ? : ")
+
+        # On retient la taille de la grille dans la variable n
+
+        reponse_ok = True   # On pense que la réponse sera correcte
+        if taille == "5x5":
+            n = 5
+        elif taille == "6x6":
+            n = 6
+        elif taille == "7x7":
+            n = 7
+        elif taille == "8x8":
+            n = 8
+        elif taille == "9x9":
+            n = 9
+        else:
+            reponse_ok = False
+
+    return n
+
+
+def creation_tableau(n):
+    """
+    Cette fonction à pour rôle de créer un tableau de taille choisie
+    préalablement par l'utilisateur.
+    """
+    # Création d'une liste de listes remplies de 0
+    l = n * [n * [0]]
+    return l
+
+
+def case_dispo(liste: list, colonne: int, ligne: int) -> bool:
+    """
+    Cette fonction a pour role de tester si la case visée est vide ou déjà
+    attribué dans la zone du plateau de jeu en fonction de sa colonne et de sa
+    case. La fonction retourne un booléen. Si la case n'a jamais été visé la
+    fonction retourne True. Si elle a déjà été visé la fonction retourne False.
+
+    Paramètres
+    ----------
+    liste : list
+        Liste qui correspond au plateau de jeu où sera effectué le test
+    colonne: int
+        Cela correspond à la position de la colonne où est effectué le test
+    ligne : int
+        Cela correspond à la position de la ligne où est effectué le test
+
+    Retour
+    ------
+    True or False : bool
+        La fonction retourne soit True soit False selon la disponibilité de la
+    case
+    """
+    if liste[colonne][ligne] == 0:
+        return True
+    else:
+        return False
+
+
+def place_droite(liste: list, colonne: int, ligne_new: int, n: int):
+    """
+    Cette fonction a pour rôle de placer le bateau vers la droite case par case
+    à partir d'une position déjà connue auparavant.
+
+    Paramètres
+    ----------
+    liste : list
+        Liste qui correspond au plateau de jeu
+    colonne : int
+        Position de la colonne
+    ligne_new : int
+        Position de la ligne
+    n : taille du bateau
+
+    Retours
+    -------
+    l : list
+        Liste contenant des booléen True et/ou False
+    """
+    colonne_new = colonne + 1
+    if case_dispo(liste, colonne_new, ligne_new) == True:
+        liste[colonne_new][ligne_new] = n
+        l = []
+        # Initialisateur du compteur
+        i = 0
+        while i < n - 2:
+            colonne_new += 1
+            if case_dispo(liste, colonne_new, ligne_new) == True:
+                liste[colonne_new][ligne_new] = n
+                l = 0
+            else:
+                l = 1
+            i += 1  # Accrémentation du compteur
+
+        return l
+
+
+def place_gauche(liste: list, colonne: int, ligne_new: int, n: int):
+    """
+    Cette fonction a pour rôle de placer le bateau vers la gauche case par case
+    à partir d'une position déjà connue auparavant.
+
+    Paramètres
+    ----------
+    liste : list
+        Liste qui correspond au plateau de jeu
+    colonne : int
+        Position de la colonne
+    ligne_new : int
+        Position de la ligne
+    n : taille du bateau
+
+    Retours
+    -------
+    l : list
+        Liste contenant des booléen True et/ou False
+    """
+    colonne_new = colonne - 1
+    if case_dispo(liste, colonne_new, ligne_new) == True:
+        liste[colonne_new][ligne_new] = n
+        l = []
+        # Initialisateur du compteur
+        i = 0
+        while i < n - 2:
+            colonne_new -= 1
+            if case_dispo(liste, colonne_new, ligne_new) == True:
+                liste[colonne_new][ligne_new] = n
+                l = 0
+            else:
+                l = 1
+            i += 1  # Accrémentation du compteur
+
+        return l
+
+
+def place_haut(liste: list, colonne: int, ligne_new: int, n: int):
+    """
+    Cette fonction a pour rôle de placer le bateau vers le haut case par case
+    à partir d'une position déjà connue auparavant.
+
+    Paramètres
+    ----------
+    liste : list
+        Liste qui correspond au plateau de jeu
+    colonne : int
+        Position de la colonne
+    ligne_new : int
+        Position de la ligne
+    n : taille du bateau
+
+    Retours
+    -------
+    l : list
+        Liste contenant des booléen True et/ou False
+    """
+    colonne_new = colonne
+    if case_dispo(liste, colonne_new, ligne_new) == True:
+        liste[colonne_new][ligne_new] = n
+        l = []
+        # Initialisation du compteur
+        i = 0
+        while i < n - 2:
+            ligne_new -= 1
+            if case_dispo(liste, colonne_new, ligne_new) == True:
+                liste[colonne_new][ligne_new] = n
+                l = 0
+            else:
+                l = 1
+            i += 1  # Accrémentation du compteur
+
+        return l
+
+
+def place_bas(liste: list, colonne: int, ligne_new: int, n: int):
+    """
+    Cette fonction a pour rôle de placer le bateau vers le haut case par case
+    à partir d'une position déjà connue auparavant.
+
+    Paramètres
+    ----------
+    liste : list
+        Liste qui correspond au plateau de jeu
+    colonne : int
+        Position de la colonne
+    ligne_new : int
+        Position de la ligne
+    n : taille du bateau
+
+    Retours
+    -------
+    l : list
+        Liste contenant des booléen True et/ou False
+    """
+    colonne_new = colonne
+    if case_dispo(liste, colonne_new, ligne_new) == True:
+        liste[colonne_new][ligne_new] = n
+        l = []
+        # Initialisation du compteur
+        i = 0
+        while i < n - 2:
+            ligne_new += 1
+            if case_dispo(liste, colonne_new, ligne_new) == True:
+                liste[colonne_new][ligne_new] = n
+                l = 0
+            else:
+                l = 1
+            i += 1  # Accrémentation du compteur
+
+        return l
+
+
+def place_bateau(liste: list, taille: int, n: int) -> list:
+    """ Cette fonction a pour role de placer un bateau de taille n de façon
+    aléatoire dans la zone de jeu en vérifiant que les cases visées de façon
+    aléatoire ne sont pas déjà occupées.
+
+    Paramètres
+    ----------
+    Liste : list
+        Liste qui correspond au plateau de jeu où sera effectué le test
+    taille : int
+        Cela correspond à la dimension du plateau de jeu
+    n : int
+        Cela correspond à la taille du bateau à placer
+
+    Retour
+    ------
+    liste_modif : list
+        Plateau de jeu avec le bateau placé
+    """
+    colonne = random.randint(0, taille - 1)
+    ligne = random.randint(0, taille - 1)
+    reponse_ok = False
+    while not reponse_ok:
+        if case_dispo(liste, colonne, ligne) == True:
+            liste[colonne][ligne] = n
+            # Condition coin gauche haut
+            if ligne < n - 1 and colonne < n - 1:
+                ligne_new = random.randint(ligne, ligne + 1)
+                # On place le bateau case par case vers la droite
+                if ligne_new == ligne:
+                    l = place_droite(liste, colonne, ligne_new, n)
+                    a = l.count(1)
+                    if a == 0:
+                        reponse_ok = True
+                # On place le bateau case par case vers le bas
+                else:
+                    l = place_bas(liste, colonne, ligne_new, n)
+                    a = l.count(1)
+                    if a == 0:
+                        reponse_ok = True
+
+            # Condition coin gauche bas
+            elif ligne > taille - n - 1 and colonne < n - 1:
+                ligne_new = random.randint(ligne - 1, ligne)
+                # On place le bateau case par case vers la droite
+                if ligne_new == ligne:
+                    l = place_droite(liste, colonne, ligne_new, n)
+                    a = l.count(1)
+                    if a == 0:
+                        reponse_ok = True
+                # On place le bateau case par case vers le haut
+                else:
+                    l = place_haut(liste, colonne, ligne_new, n)
+                    a = l.count(1)
+                    if a == 0:
+                        reponse_ok = True
+
+            # Condition coin droit haut
+            elif ligne < n - 1 and colonne > taille - n - 1:
+                ligne_new = random.randint(ligne, ligne + 1)
+                # On place le bateau case par case vers la gauche
+                if ligne_new == ligne:
+                    l = place_gauche(liste, colonne, ligne_new, n)
+                    a = l.count(1)
+                    if a == 0:
+                        reponse_ok = True
+                # On place le bateau case par case vers le bas
+                else:
+                    l = place_bas(liste, colonne, ligne_new, n)
+                    a = l.count(1)
+                    if a == 0:
+                        reponse_ok = True
+
+            # Condition coin droit bas
+            elif ligne > taille - n - 1 and colonne > taille - n - 1:
+                ligne_new = random.randint(ligne - 1, ligne)
+                # On place le bateau case par case vers la gauche
+                if ligne_new == ligne:
+                    l = place_gauche(liste, colonne, ligne_new, n)
+                    a = l.count(1)
+                    if a == 0:
+                        reponse_ok = True
+                # On place le bateau case par case vers le haut
+                else:
+                    l = place_haut(liste, colonne, ligne_new, n)
+                    a = l.count(1)
+                    if a == 0:
+                        reponse_ok = True
+
+            else:
+                if ligne < n - 1:
+                    choix = random.randint(0, 2)
+                    # On place le bateau case par case vers la gauche
+                    if choix == 0:
+                        l = place_gauche(liste, colonne, ligne, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+                    # On place le bateau case par case vers la droite
+                    elif choix == 1:
+                        l = place_droite(liste, colonne, ligne, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+                    # On place le bateau case par case vers le bas
+                    else:
+                        l = place_bas(liste, colonne, ligne, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+
+                elif ligne > taille - n - 1:
+                    choix = random.randint(0, 2)
+                    # On place le bateau case par case vers la gauche
+                    if choix == 0:
+                        l = place_gauche(liste, colonne, ligne, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+                    # On place le bateau case par case vers la droite
+                    elif choix == 1:
+                        l = place_droite(liste, colonne, ligne, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+                    # On place le bateau case par case vers le haut
+                    else:
+                        l = place_haut(liste, colonne, ligne, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+
+                elif colonne < n - 1:
+                    choix = random.randint(0, 2)
+                    # On place le bateau case par case vers la droite
+                    if choix == 0:
+                        l = place_droite(liste, colonne, ligne, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+                    # On place le bateau case par case vers le haut
+                    elif choix == 1:
+                        l = place_haut(liste, colonne, ligne, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+                    # On place le bateau case par case vers le bas
+                    else:
+                        l = place_bas(liste, colonne, ligne, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+
+                elif colonne > taille - n - 1:
+                    choix = random.randint(0, 2)
+                    # On place le bateau case par case vers la gauche
+                    if choix == 0:
+                        l = place_gauche(liste, colonne, ligne, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+                        # On place le bateau case par case vers le haut
+                    elif choix == 1:
+                        l = place_haut(liste, colonne, ligne, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+                    # On place le bateau case par case vers le bas
+                    else:
+                        l = place_bas(liste, colonne, ligne, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+
+                else:
+                    choix = random.randint(0, 3)
+                    # On place le bateau case par case vers le haut
+                    if choix == 0:
+                        l = place_haut(liste, colonne, ligne, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+                        # On place le bateau case par case vers la droite
+                        elif choix == 1:
+                            l = place_droite(liste, colonne, ligne, n)
+                            a = l.count(1)
+                            if a == 0:
+                                reponse_ok = True
+                        # On place le bateau case par case vers le bas
+                        elif choix == 2:
+                            l = place_bas(liste, colonne, ligne, n)
+                            a = l.count(1)
+                            if a == 0:
+                                reponse_ok = True
+                        # On place le bateau case par case vers la gauche
+                        else:
+                            l = place_gauche(liste, colonne, ligne, n)
+                            a = l.count(1)
+                            if a == 0:
+                                reponse_ok = True
+
+
+def tir_com(liste: list, taille: int):
+    """
+    Cette fonction permet à l'ordinateur de tirer au hasard dans notre grille
+    de jeu
+    """
+    colonne = random.randint(0, taille - 1)
+    ligne = random.randint(0, taille - 1)
+    if case_dispo(liste, colonne, ligne) == True:
+        liste[colonne][ligne] = 1
+        print("A l'eau !")
+    else:
+        reponse_ok = False
+        while not reponse_ok:
+            if liste[colonne][ligne] != 1:
+                reponse_ok = True
+                liste[colonne][ligne] *= 10
+                print("Touché !")
+
+
+def tir_nous(liste: list):
+    """
+    Cette fonction nous permettre de tirer dans la grille de l'adversaire
+    """
+    colonne = input("Dans quelle numéro de colonne souhaitez vous tirer?:")
+    ligne = input("Dans quelle numéro de ligne souhaitez vous tirer?:")
+    if case_dispo(liste, colonne, ligne) == True:
+        liste[colonne][ligne] = 1
+        print("A l'eau !")
+    else:
+        liste[colonne][ligne] *= 10
+        print("Touché !")
+
+
+def comptage_touché(liste: list, n: int, coulé: int):
+    """
+    Cette fonction a pour but de compter le nombre de case touché et d'affiché
+    coulé quand un bateau est coulé.
+    """
+    if liste.count(n * 10) == n:
+        print("Coulé !")
+        coulé += 1
+
+    return coulé
+
+
+def mes_bateaux(liste: list, taille: int, n: int) -> list:
+
+    """
+    Cette fonction a pour rôle de placer nos bateaux sur notre grille de jeu
+    où l'on choisi de les placer et selon l'orientation que l'on a choisi.
+
+    Paramètres
+    ----------
+    liste : list
+        Plateau de jeu où l'on va placer ses bateaux
+
+    Retour
+    ------
+    liste : list
+        Plateau de jeu avec nos bateaux placés
+    """
+
+    colonne = int(input("Entrez le numéro de la colonne où vous souhaitez\
+    placer votre premier bateau: ")) - 1
+    ligne = int(input("Entrez le numéro de la ligne où vous souhaitez placer\
+    votre premier bateau: ")) - 1
+    reponse_ok = False
+    while not reponse_ok:
+        if case_dispo(liste, colonne, ligne) == True:
+            liste[colonne][ligne] = n
+            # Condition coin gauche haut
+            if ligne < n - 1 and colonne < n - 1:
+                ligne_new = input("orientation 'droite' ou 'bas'")
+                # On place le bateau case par case vers la droite
+                if ligne_new == 'droite':
+                    ligne_new = ligne
+                    l = place_droite(liste, colonne, ligne_new, n)
+                    a = l.count(1)
+                    if a == 0:
+                        reponse_ok = True
+                # On place le bateau case par case vers le bas
+                else:
+                    ligne_new = ligne + 1
+                    l = place_bas(liste, colonne, ligne_new, n)
+                    a = l.count(1)
+                    if a == 0:
+                        reponse_ok = True
+
+            # Condition coin gauche bas
+            elif ligne > taille - n - 1 and colonne < n - 1:
+                ligne_new = random.randint(ligne - 1, ligne)
+                # On place le bateau case par case vers la droite
+                if ligne_new == ligne:
+                    ligne_new = ligne
+                    l = place_droite(liste, colonne, ligne_new, n)
+                    a = l.count(1)
+                    if a == 0:
+                        reponse_ok = True
+                # On place le bateau case par case vers le haut
+                else:
+                    ligne_new = ligne - 1
+                    l = place_haut(liste, colonne, ligne_new, n)
+                    a = l.count(1)
+                    if a == 0:
+                        reponse_ok = True
+
+            # Condition coin droit haut
+            elif ligne < n - 1 and colonne > taille - n - 1:
+                ligne_new = random.randint(ligne, ligne + 1)
+                # On place le bateau case par case vers la gauche
+                if ligne_new == ligne:
+                    ligne_new = ligne
+                    l = place_gauche(liste, colonne, ligne_new, n)
+                    a = l.count(1)
+                    if a == 0:
+                        reponse_ok = True
+                # On place le bateau case par case vers le bas
+                else:
+                    ligne_new = ligne + 1
+                    l = place_bas(liste, colonne, ligne_new, n)
+                    a = l.count(1)
+                    if a == 0:
+                        reponse_ok = True
+
+            # Condition coin droit bas
+            elif ligne > taille - n - 1 and colonne > taille - n - 1:
+                ligne_new = random.randint(ligne - 1, ligne)
+                # On place le bateau case par case vers la gauche
+                if ligne_new == ligne:
+                    ligne_new = ligne
+                    l = place_gauche(liste, colonne, ligne_new, n)
+                    a = l.count(1)
+                    if a == 0:
+                        reponse_ok = True
+                # On place le bateau case par case vers le haut
+                else:
+                    ligne_new = ligne - 1
+                    l = place_haut(liste, colonne, ligne_new, n)
+                    a = l.count(1)
+                    if a == 0:
+                        reponse_ok = True
+
+            else:
+                if ligne < n - 1:
+                    choix = random.randint(0, 2)
+                    # On place le bateau case par case vers la gauche
+                    if choix == 0:
+                        l = place_gauche(liste, colonne, ligne, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+                    # On place le bateau case par case vers la droite
+                    elif choix == 1:
+                        l = place_droite(liste, colonne, ligne, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+                    # On place le bateau case par case vers le bas
+                    else:
+                        ligne_new = ligne + 1
+                        l = place_bas(liste, colonne, ligne_new, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+
+                elif ligne > taille - n - 1:
+                    choix = random.randint(0, 2)
+                    # On place le bateau case par case vers la gauche
+                    if choix == 0:
+                        l = place_gauche(liste, colonne, ligne, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+                    # On place le bateau case par case vers la droite
+                    elif choix == 1:
+                        l = place_droite(liste, colonne, ligne, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+                    # On place le bateau case par case vers le haut
+                    else:
+                        ligne_new = ligne - 1
+                        l = place_haut(liste, colonne, ligne_new, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+
+                elif colonne < n - 1:
+                    choix = random.randint(0, 2)
+                    # On place le bateau case par case vers la droite
+                    if choix == 0:
+                        l = place_droite(liste, colonne, ligne, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+                    # On place le bateau case par case vers le haut
+                    elif choix == 1:
+                        ligne_new = ligne - 1
+                        l = place_haut(liste, colonne, ligne_new, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+                    # On place le bateau case par case vers le bas
+                    else:
+                        ligne_new = ligne + 1
+                        l = place_bas(liste, colonne, ligne_new, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+
+                elif colonne > taille - n - 1:
+                    choix = random.randint(0, 2)
+                    # On place le bateau case par case vers la gauche
+                    if choix == 0:
+                        l = place_gauche(liste, colonne, ligne, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+                        # On place le bateau case par case vers le haut
+                    elif choix == 1:
+                        ligne_new = ligne - 1
+                        l = place_haut(liste, colonne, ligne_new, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+                    # On place le bateau case par case vers le bas
+                    else:
+                        ligne_new = ligne + 1
+                        l = place_bas(liste, colonne, ligne_new, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+
+                else:
+                    choix = random.randint(0, 3)
+                    # On place le bateau case par case vers le haut
+                    if choix == 0:
+                        ligne_new = ligne - 1
+                        l = place_haut(liste, colonne, ligne_new, n)
+                        a = l.count(1)
+                        if a == 0:
+                            reponse_ok = True
+                        # On place le bateau case par case vers la droite
+                        elif choix == 1:
+                            l = place_droite(liste, colonne, ligne, n)
+                            a = l.count(1)
+                            if a == 0:
+                                reponse_ok = True
+                        # On place le bateau case par case vers le bas
+                        elif choix == 2:
+                            ligne_new = ligne + 1
+                            l = place_bas(liste, colonne, ligne, n)
+                            a = l.count(1)
+                            if a == 0:
+                                reponse_ok = True
+                        # On place le bateau case par case vers la gauche
+                        else:
+                            l = place_gauche(liste, colonne, ligne, n)
+                            a = l.count(1)
+                            if a == 0:
+                                reponse_ok = True
+
+
+def remplissage_nous(taille: int, liste: list) -> list:
+    """
+    Cette fonction a pour but de remplir notre grille de façon choisi selon
+    la taille donnée en argument précédemment.
+    """
+    print("debut remplissage com")
+    if taille == 5:
+        # Placement du premier bateau de 3 cases.
+        print(" avanat appel bateau 3")
+        mes_bateaux(liste, taille, 3)
+
+        # Placement du deuxième bateau de 2 cases.
+        mes_bateaux(liste, taille, 2)
+
+    elif taille == 6:
+        # Placement du premier bateau de 4 cases.
+        mes_bateaux(liste, taille, 4)
+        # Placement du deuxième bateau de 3 cases.
+        mes_bateaux(liste, taille, 3)
+        # Placement dutroisieme bateau de 2 cases.
+        mes_bateaux(liste, taille, 2)
+
+    elif taille == 7:
+        # Placement du premier bateau de 5 cases.
+        mes_bateaux(liste, taille, 5)
+        # Placement du deuxième bateau de 4 cases.
+        mes_bateaux(liste, taille, 4)
+        # Placement du troisieme bateau de 3 cases.
+        mes_bateaux(liste, taille, 3)
+        # Placement du quatrieme bateau de 2 cases.
+        mes_bateaux(liste, taille, 2)
+
+    elif taille == 8:
+        # Placement du premier bateau de 6 cases.
+        mes_bateaux(liste, taille, 6)
+        # Placement du deuxième bateau de 5 cases.
+        mes_bateaux(liste, taille, 5)
+        # Placement du troisieme bateau de 4 cases.
+        mes_bateaux(liste, taille, 4)
+        # Placement du quatrieme bateau de 3 cases.
+        mes_bateaux(liste, taille, 3)
+        # Placement du cinquième bateau de 2 cases.
+        mes_bateaux(liste, taille, 2)
+
+    else:
+        # Placement du premier bateau de 7 cases.
+        mes_bateaux(liste, taille, 7)
+        # Placement du deuxième bateau de 6 cases.
+        mes_bateaux(liste, taille, 6)
+        # Placement du troisieme bateau de 5 cases.
+        mes_bateaux(liste, taille, 5)
+        # Placement du quatrieme bateau de 4 cases.
+        mes_bateaux(liste, taille, 4)
+        # Placement du cinquièùe bateau de 3 cases.
+        mes_bateaux(liste, taille, 3)
+        # Placement du sixième bateau de 2 cases.
+        mes_bateaux(liste, taille, 2)
+
+    return liste
+
+
+def remplissage_com(taille: int, liste: list) -> list:
+    """
+    Cette fonction a pour but de remplir la grille de l'adversaire de façon
+    aléatoire selon la taille donnée en argument précédemment.
+    """
+    print("debut remplissage com")
+    if taille == 5:
+        # Placement du premier bateau de 3 cases.
+        print(" avanat appel bateau 3")
+        place_bateau(liste, taille, 3)
+
+        # Placement du deuxième bateau de 2 cases.
+        place_bateau(liste, taille, 2)
+
+    elif taille == 6:
+        # Placement du premier bateau de 4 cases.
+        place_bateau(liste, taille, 4)
+        # Placement du deuxième bateau de 3 cases.
+        place_bateau(liste, taille, 3)
+        # Placement dutroisieme bateau de 2 cases.
+        place_bateau(liste, taille, 2)
+
+    elif taille == 7:
+        # Placement du premier bateau de 5 cases.
+        place_bateau(liste, taille, 5)
+        # Placement du deuxième bateau de 4 cases.
+        place_bateau(liste, taille, 4)
+        # Placement du troisieme bateau de 3 cases.
+        place_bateau(liste, taille, 3)
+        # Placement du quatrieme bateau de 2 cases.
+        place_bateau(liste, taille, 2)
+
+    elif taille == 8:
+        # Placement du premier bateau de 6 cases.
+        place_bateau(liste, taille, 6)
+        # Placement du deuxième bateau de 5 cases.
+        place_bateau(liste, taille, 5)
+        # Placement du troisieme bateau de 4 cases.
+        place_bateau(liste, taille, 4)
+        # Placement du quatrieme bateau de 3 cases.
+        place_bateau(liste, taille, 3)
+        # Placement du cinquième bateau de 2 cases.
+        place_bateau(liste, taille, 2)
+
+    else:
+        # Placement du premier bateau de 7 cases.
+        place_bateau(liste, taille, 7)
+        # Placement du deuxième bateau de 6 cases.
+        place_bateau(liste, taille, 6)
+        # Placement du troisieme bateau de 5 cases.
+        place_bateau(liste, taille, 5)
+        # Placement du quatrieme bateau de 4 cases.
+        place_bateau(liste, taille, 4)
+        # Placement du cinquièùe bateau de 3 cases.
+        place_bateau(liste, taille, 3)
+        # Placement du sixième bateau de 2 cases.
+        place_bateau(liste, taille, 2)
+
+    return liste
+
+def jouer():
+    """
+    Cette fonction à pour but jour une partie en faisant tirer l'ordinateur et
+    nous chacun notre tour.
+    """
+    # Initialisation des lancés
+    coup1 = 0
+    coup_com = 0
+    while coulé > taille - 3:
+        tir_nous(liste)
+        tir_com
+
+
+
+def main():
+    """ Fonction principale """
+    # On crée les grilles des adversaires.
+    taille = taille_grille()
+    grille_joueur = creation_tableau(taille)
+
+    grille_comvuparjoueur = creation_tableau(taille)
+    grille_com = creation_tableau(taille)
+    grille_joueurvuparcom = creation_tableau(taille)
+    # Remplissage grille adversaire
+    grille_com = remplissage_com(taille, grille_com)
+    # Affichage des grilles
+    print("Grille Joueur")
+    print(grille_joueur)
+    print("Grille Ordinateur vu par le joueur")
+    print(grille_comvuparjoueur)
+    print("Grille Ordinateur")
+    print(grille_com)
+    print("Grille Joueur vu par l'ordinateur")
+    print(grille_joueurvuparcom)
+
+main()
+
+input()
